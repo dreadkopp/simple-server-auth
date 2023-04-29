@@ -4,6 +4,7 @@ namespace dreadkopp\SimpleServiceAuth\HTTP\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
@@ -22,7 +23,7 @@ class ServiceAccessDefaultDenyMiddleware
         }
 
         // if serviceAccess is used, check it there
-        if (in_array(ServiceAccessMiddleware::class, $request->route()?->gatherMiddleware()??[], true)) {
+        if (in_array(ServiceAccessMiddleware::class, Arr::flatten($request->route()?->middleware()??[]), true)) {
             return $next($request);
         }
 
