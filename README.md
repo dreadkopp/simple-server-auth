@@ -1,5 +1,6 @@
-this library provides a simple way to authenticate 
-access to various laravel-based services by storing a list of service names in a shared cache (i.e. redis)
+this library provides a simple way to authorize access to various laravel-based services by storing a list of service names in a shared cache (i.e. redis)
+
+this library does not provide any kind of authentication. Its just a mechanic to limit access to your api endpoints
 
 by instanciating the ServiceAccessMiddleware each request will be checked for a header
 'x-service-access-token'
