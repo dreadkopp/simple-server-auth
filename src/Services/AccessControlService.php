@@ -15,9 +15,7 @@ class AccessControlService
     public function __construct(
         protected readonly Repository $cache,
         protected readonly int $ttl,
-    )
-    {
-    }
+    ){}
 
     /**
      * @throws InvalidArgumentException

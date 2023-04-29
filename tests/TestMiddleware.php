@@ -7,6 +7,8 @@ use dreadkopp\SimpleServiceAuth\HTTP\Middleware\ServiceAccessDefaultDenyMiddlewa
 use dreadkopp\SimpleServiceAuth\HTTP\Middleware\ServiceAccessMiddleware;
 use dreadkopp\SimpleServiceAuth\Providers\ServiceAccessServiceProvider;
 use dreadkopp\SimpleServiceAuth\Services\AccessControlService;
+use Illuminate\Foundation\Http\Middleware\TrimStrings;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
@@ -229,5 +231,17 @@ class TestMiddleware extends TestCase
             ->get($uri)
             ->assertOk()
             ->assertSee('hello');
+    }
+
+    public function testMiddlewareGroup() :void
+    {
+
+        $this->app->make('router')->middlewareGroup('grouped',[TrimStrings::class,ServiceAccessMiddleware::class]);
+
+        Route::get('grouped',static fn() => 'groupies!')->middleware(['grouped']);
+        $this->withHeader('x-service-access-token', $this->allowedToken->token)
+            ->get('grouped')
+            ->assertOk()
+            ->assertSee('groupies!');
     }
 }
